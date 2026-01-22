@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virada de Jogo — Recomeço</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="container">
+    <div class="logo">VIRADA DE JOGO</div>
+    <nav class="nav">
+      <a href="#sobre">Sobre</a>
+      <a href="#motivacao">Motivação</a>
+      <a href="#passos">Caminho</a>
+      <a href="#depoimentos">Histórias</a>
+      <a href="#chat-ia" class="nav-btn">Chat</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO (VÍDEO NETFLIX) ================= -->
+<section class="hero">
+
+  <!-- 🎥 VÍDEO DE FUNDO -->
+  <video id="hero-video" autoplay muted loop playsinline>
+    <source src="video/hero-video.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
+
+  <!-- OVERLAY -->
+  <div class="overlay"></div>
+
+  <!-- CONTEÚDO -->
+  <div class="hero-content">
+    <h1>Recomeçar é possível</h1>
+    <p>A virada começa dentro de você</p>
+    <a href="#sobre" class="btn-primary">Conheça o projeto</a>
+  </div>
+
+</section>
+
+<!-- ================= SOBRE ================= -->
+<section id="sobre" class="section section-narrow">
+  <h2>Nosso Propósito</h2>
+  <p>
+    O <strong>Virada de Jogo</strong> existe para provar que o vício não define ninguém.
+    Aqui você encontra apoio, orientação e histórias reais de superação.
+  </p>
+</section>
+
+<!-- ================= MOTIVAÇÃO ================= -->
+<section id="motivacao" class="section bg-dark">
+  <h2>INSPIRAÇÃO</h2>
+
+  <div class="grid grid-3">
+    <div class="image-card">
+      <img src="img/motivacao1.jpg" alt="">
+      <p>Você é maior que qualquer erro do passado.</p>
+    </div>
+
+    <div class="image-card">
+      <img src="img/motivacao2.jpeg" alt="">
+      <p>Todo dia é uma nova chance de recomeçar.</p>
+    </div>
+
+    <div class="image-card">
+      <img src="img/motivacao3.jpeg" alt="">
+      <p>A maior vitória é sobre si mesmo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PASSOS ================= -->
+<section id="passos" class="section bg-light">
+  <h2>O Caminho da Transformação</h2>
+
+  <div class="grid grid-4">
+    <div class="step-card">
+      <img src="img/motivacao1.jpg" alt="">
+      <h3>Reconhecer</h3>
+      <p>Admitir que precisa de ajuda é o primeiro passo.</p>
+    </div>
+
+    <div class="step-card">
+      <img src="img/motivacao4.jpeg" alt="">
+      <h3>Decisão</h3>
+      <p>A mudança começa com uma escolha diária.</p>
+    </div>
+
+    <div class="step-card">
+      <img src="img/motivacao4.jpeg" alt="">
+      <h3>Persistir</h3>
+      <p>Nem todo dia é fácil, mas todo dia vale a pena.</p>
+    </div>
+
+    <div class="step-card">
+      <img src="img/motivacao5.jpeg.jpg" alt="">
+      <h3>Vencer</h3>
+      <p>Você é mais forte do que imagina.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEPOIMENTOS ================= -->
+<section id="depoimentos" class="section">
+  <h2>Histórias Reais</h2>
+
+  <div class="grid grid-3">
+    <div class="testimonial">
+      <img src="img/motivacao1.jpg" alt="">
+      <p>“Achei que não tinha saída. Hoje sou livre.”</p>
+    </div>
+
+    <div class="testimonial">
+      <img src="img/motivacao4.jpeg" alt="">
+      <p>“Recuperei minha família e minha paz.”</p>
+    </div>
+
+    <div class="testimonial">
+      <img src="img/motivacao2.jpeg " alt="">
+      <p>“A virada começou quando pedi ajuda.”</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAT ================= -->
+<section id="chat-ia" class="chat-section">
+  <div class="chat-box">
+    <h2>Assistente de Apoio</h2>
+    <p class="chat-subtitle">Converse de forma anônima e segura</p>
+
+    <div id="chatWindow" class="chat-window-new"></div>
+
+    <div class="chat-input-area-new">
+      <textarea id="chatInput" placeholder="Digite sua mensagem..."></textarea>
+      <button id="sendBtn">Enviar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CADASTRO ================= -->
+<section id="cadastro" class="section bg-dark section-narrow">
+  <h2>Faça Parte da Mudança</h2>
+  <p>Receba conteúdos e apoio direto no seu e-mail.</p>
+
+  <form class="cadastro-form" action="https://formsubmit.co/viradadegame@gmail.com" method="POST">
+    <input type="text" name="name" placeholder="Nome completo" required>
+    <input type="email" name="email" placeholder="Seu e-mail" required>
+    <input type="tel" name="telefone" placeholder="Telefone" required>
+    <button type="submit">Cadastrar</button>
+    <input type="hidden" name="_captcha" value="false">
+  </form>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <p>© <span id="year"></span> Virada de Jogo — Recomece sua história</p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
