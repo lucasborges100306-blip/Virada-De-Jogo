@@ -8,22 +8,22 @@ import { fileURLToPath } from "url";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // =======================
-// CONFIG
+// CONFIG BÁSICA
 // =======================
-app.use(cors());
+app.use(cors()); // 🔥 IMPORTANTE: evita erro do botão não enviar
 app.use(express.json());
 
 // =======================
-// PATH
+// CAMINHOS
 // =======================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =======================
-// STATIC FILES
+// ARQUIVOS ESTÁTICOS (HTML, CSS, JS, IMG, VIDEO)
 // =======================
 app.use(express.static(__dirname));
 
@@ -35,33 +35,34 @@ const client = new OpenAI({
 });
 
 // =======================
-// HEALTH CHECK
+// ROTA TESTE
 // =======================
 app.get("/health", (req, res) => {
   res.json({ status: "Servidor online 🚀" });
 });
 
 // =======================
-// CHAT (ANTI-APOSTA)
+// CHAT IA (POST)
 // =======================
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message } = req.body;
-    if (!message) {
-      return res.status(400).json({ error: "Mensagem vazia" });
+    const { message, userMessage } = req.body;
+
+    // Aceita os dois formatos (não quebra seu front)
+    const finalMessage = message || userMessage;
+
+    if (!finalMessage) {
+      return res.status(400).json({
+        error: "Mensagem vazia.",
+      });
     }
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
-          role: "system",
-          content:
-            "Você é um assistente de apoio. Nunca incentive apostas, jogos de azar ou gambling. Sempre desencoraje apostas e sugira alternativas saudáveis.",
-        },
-        {
           role: "user",
-          content: message,
+          content: finalMessage,
         },
       ],
     });
@@ -69,13 +70,26 @@ app.post("/api/chat", async (req, res) => {
     res.json({
       reply: completion.choices[0].message.content,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erro interno do servidor" });
+
+  } catch (error) {
+    console.error("❌ ERRO CHAT:", error);
+
+    if (error?.status === 429) {
+      return res.status(429).json({
+        error: "Limite da API atingido ou sem créditos.",
+      });
+    }
+
+    res.status(500).json({
+      error: "Erro interno no servidor.",
+    });
   }
 });
 
 // =======================
+// START SERVER
+// =======================
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("🔥 Servidor rodando");
+  console.log(`🔥 Servidor rodando na porta ${PORT}`);
 });
+//   // 🔹 Mostrar indicador de digitando
