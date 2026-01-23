@@ -7,23 +7,26 @@ import { fileURLToPath } from "url";
 
 dotenv.config();
 
+// =======================
+// APP
+// =======================
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // =======================
-// CONFIG BÁSICA
+// CONFIG
 // =======================
-app.use(cors()); // 🔥 IMPORTANTE: evita erro do botão não enviar
+app.use(cors());
 app.use(express.json());
 
 // =======================
-// CAMINHOS
+// PATHS
 // =======================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =======================
-// ARQUIVOS ESTÁTICOS (HTML, CSS, JS, IMG, VIDEO)
+// ARQUIVOS ESTÁTICOS
 // =======================
 app.use(express.static(__dirname));
 
@@ -35,31 +38,43 @@ const client = new OpenAI({
 });
 
 // =======================
-// ROTA TESTE
+// HEALTH CHECK
 // =======================
 app.get("/health", (req, res) => {
   res.json({ status: "Servidor online 🚀" });
 });
 
 // =======================
-// CHAT IA (POST)
+// CHAT IA (ANTI APOSTAS)
 // =======================
 app.post("/api/chat", async (req, res) => {
   try {
     const { message, userMessage } = req.body;
-
-    // Aceita os dois formatos (não quebra seu front)
     const finalMessage = message || userMessage;
 
     if (!finalMessage) {
-      return res.status(400).json({
-        error: "Mensagem vazia.",
-      });
+      return res.status(400).json({ error: "Mensagem vazia." });
     }
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
+        {
+          role: "system",
+          content: `
+Você é um assistente do projeto "Virada de Jogo".
+
+REGRAS OBRIGATÓRIAS:
+- Você NUNCA deve incentivar apostas, jogos de azar ou qualquer tipo de jogo financeiro.
+- Você NUNCA deve dar dicas, estratégias, odds ou previsões.
+- Se o usuário falar sobre apostas, responda de forma empática, mas SEMPRE desencorajando.
+- Seu foco é recuperação emocional, autocontrole e recomeço.
+- Seja humano, respeitoso e acolhedor.
+- Incentive escolhas saudáveis e buscar ajuda quando necessário.
+
+Você existe para ajudar pessoas a saírem do vício, não para apostar.
+          `,
+        },
         {
           role: "user",
           content: finalMessage,
@@ -87,9 +102,8 @@ app.post("/api/chat", async (req, res) => {
 });
 
 // =======================
-// START SERVER
+// START SERVER (RENDER)
 // =======================
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🔥 Servidor rodando na porta ${PORT}`);
 });
-//   // 🔹 Mostrar indicador de digitando
