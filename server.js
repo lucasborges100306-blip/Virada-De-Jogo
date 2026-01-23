@@ -44,3 +44,10 @@ COMPORTAMENTO:
     res.status(500).json({ error: "Erro interno no servidor." });
   }
 });
+
+
+  } catch (error) {
+    console.error("❌ ERRO CHAT:", error);
+    res.status(500).json({ error: "Erro interno no servidor." });
+  }
+});
