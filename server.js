@@ -7,8 +7,11 @@ import { fileURLToPath } from "url";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+// ✅ APP TEM QUE EXISTIR
+const app = express();
 
+// ✅ PORTA DO RENDER
+const PORT = process.env.PORT || 3000;
 
 // =======================
 // CONFIG
@@ -23,7 +26,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =======================
-// STATIC FILES
+// ARQUIVOS ESTÁTICOS
 // =======================
 app.use(express.static(__dirname));
 
@@ -35,7 +38,7 @@ const client = new OpenAI({
 });
 
 // =======================
-// HEALTH
+// HEALTH CHECK
 // =======================
 app.get("/health", (req, res) => {
   res.json({ status: "Servidor online 🚀" });
@@ -46,22 +49,30 @@ app.get("/health", (req, res) => {
 // =======================
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, userMessage } = req.body;
-    const finalMessage = message || userMessage;
+    const { message } = req.body;
 
-    if (!finalMessage) {
+    if (!message) {
       return res.status(400).json({ error: "Mensagem vazia." });
     }
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: finalMessage }],
+      messages: [
+        {
+          role: "system",
+          content:
+            "Você é um assistente de apoio emocional. Nunca incentive apostas, jogos de azar ou qualquer tipo de betting. Ajude sempre a sair do vício.",
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
     });
 
     res.json({
       reply: completion.choices[0].message.content,
     });
-
   } catch (error) {
     console.error("❌ ERRO CHAT:", error);
     res.status(500).json({ error: "Erro interno no servidor." });
@@ -69,8 +80,9 @@ app.post("/api/chat", async (req, res) => {
 });
 
 // =======================
-// START
+// START SERVER (ESSENCIAL)
 // =======================
 app.listen(PORT, () => {
   console.log(`🔥 Servidor rodando na porta ${PORT}`);
 });
+
